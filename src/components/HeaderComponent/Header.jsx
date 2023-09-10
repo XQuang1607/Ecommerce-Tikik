@@ -16,12 +16,12 @@ import ButtonInputSearch from "../ButtonInputSearch/ButtonInputSearch";
 
 const Header = () => {
   return (
-    <div>
+    <div style={{  heiht: '100%', width: '100%', display: 'flex', backgroundColor: "rgb(26,148,255)" ,justifyContent: 'center' }}>
       <WrapperHeader>
-        <Col span={6}>
+        <Col span={5}>
           <WrapperTextHeader>TIKIK</WrapperTextHeader>
         </Col>
-        <Col span={12} >
+        <Col span={13} >
           <ButtonInputSearch
             size="large"
             textButton="Tìm kiếm"
@@ -29,7 +29,7 @@ const Header = () => {
             bordered={false}
           />
         </Col>
-        <Col span={6} style={{ display: "flex", gap: "20px", alignItems: 'center' }}>
+        <Col span={6} style={{ display: "flex", gap: "54px", alignItems: 'center' }}>
           <WrapperAccountHeader>
             <UserOutlined style={{ fontSize: "30px" }} />
             <div>
