@@ -18,7 +18,7 @@ export const WrapperTextHeader = styled.span `
     text-align: left;
 `
 
-export const WrapperAccountHeader = styled.div `
+export const WrapperHeaderAccout = styled.div `
     display: flex;
     align-items: center;
     color: #fff;
@@ -29,4 +29,11 @@ export const WrapperTextHeaderSmall = styled.span `
     font-size: 12px;
     color:#fff;
     white-space: nowrap;
+`
+
+export const WrapperContentPopup = styled.p `
+    cursor: pointer;
+    &:hover {
+        color: rgb(26, 148, 255);
+    }
 `
