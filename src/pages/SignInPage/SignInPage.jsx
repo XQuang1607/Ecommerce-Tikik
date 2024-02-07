@@ -98,7 +98,7 @@ const SignInPage = () => {
             />
           </div>
           {data?.status === 'ERR' && <span style={{ color: 'red' }}>{data?.message}</span>}
-          {/* <Loading isLoading={isLoading}> */}
+          <Loading isLoading={isLoading}>
             <ButtonComponent
               disabled={!email.length || !password.length}
               onClick={handleSignIn}
@@ -114,7 +114,7 @@ const SignInPage = () => {
               textButton={'Đăng nhập'}
               styleTextButton={{ color: '#fff', fontSize: '15px', fontWeight: '700' }}
             ></ButtonComponent>
-          {/* </Loading> */}
+          </Loading>
           <p><WrapperTextLight>Quên mật khẩu?</WrapperTextLight></p>
           <p>Chưa có tài khoản? <WrapperTextLight onClick={handleNavigateSignUp}> Tạo tài khoản</WrapperTextLight></p>
         </WrapperContainerLeft>

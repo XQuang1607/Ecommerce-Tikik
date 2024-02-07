@@ -8,15 +8,20 @@ import * as UserService from './services/UserService'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateUser } from './redux/slides/userSlide'
 import axios from 'axios'
+import Loading from './components/LoadingComponent/Loading'
 
 function App() {
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false)
+  const user = useSelector((state) => state.user)
 
   useEffect(() => {
+    setIsLoading(true)
     const { storageData, decoded } = handleDecoded()
     if (decoded?.id) {
       handleGetDetailsUser(decoded?.id, storageData)
     }
+    setIsLoading(false)
   }, [])
 
   const handleDecoded = () => {
@@ -49,21 +54,24 @@ function App() {
 
     return ( 
         <div>
+        <Loading isLoading={isLoading}>
         <Router>
-        <Routes>
-          {routes.map((route) => {
-            const Page = route.page
-            const Layout = route.isShowHeader ? DefaultComponent : Fragment
-            return (
-              <Route key={route.path} path={route.path} element={
-                <Layout>
-                  <Page />
-                </Layout>
-              } />
-            )
-          })}
-        </Routes>
-      </Router>
+          <Routes>
+            {routes.map((route) => {
+              const Page = route.page
+              const ischeckAuth = !route.isPrivate || user.isAdmin
+              const Layout = route.isShowHeader ? DefaultComponent : Fragment
+              return (
+                <Route key={route.path} path={ischeckAuth && route.path} element={
+                  <Layout>
+                    <Page />
+                  </Layout>
+                } />
+              )
+            })}
+          </Routes>
+        </Router>
+      </Loading>
     </div>
     )
 }
