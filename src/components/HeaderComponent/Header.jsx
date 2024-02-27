@@ -21,6 +21,7 @@ import { resetUser } from "../../redux/slides/userSlide";
 import { useState } from "react";
 import Loading from "../LoadingComponent/Loading";
 import { useEffect } from "react";
+import { searchProduct } from '../../redux/slides/productSlide';
 
 const Header = ({ isHiddenSearch = false, isHiddenCart = false }) => {
   const navigate = useNavigate();
@@ -28,6 +29,7 @@ const Header = ({ isHiddenSearch = false, isHiddenCart = false }) => {
   const dispatch = useDispatch();
   const [userName, setUserName] = useState("");
   const [userAvatar, setUserAvatar] = useState('')
+  const [searc,setSearch] = useState('')
   const [loading, setLoading] = useState(false);
 
   const handleNavigateLogin = () => {
@@ -58,6 +60,11 @@ const Header = ({ isHiddenSearch = false, isHiddenCart = false }) => {
     </div>
   );
 
+  const onSearch = (e) => {
+    setSearch(e.target.value)
+    dispatch(searchProduct(e.target.value))
+  }
+
   return (
     <div
       style={{
@@ -79,7 +86,7 @@ const Header = ({ isHiddenSearch = false, isHiddenCart = false }) => {
               bordered={false}
               textButton="Tìm kiếm"
               placeholder="input search text"
-            // onSearch={onSearch}
+              onChange={onSearch}
             />
           </Col>
         )}
