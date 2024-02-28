@@ -10,8 +10,6 @@ import NavBarComponent from "../../components/NavBarComponent/NavBarComponent";
 import { useQuery } from '@tanstack/react-query'
 import * as ProductService from '../../services/ProductService'
 import { useSelector } from 'react-redux'
-import { useEffect } from 'react'
-import { useRef } from 'react'
 import { useState } from 'react'
 import Loading from '../../components/LoadingComponent/Loading'
 import { useDebounce } from '../../hooks/useDebounce'
@@ -19,40 +17,22 @@ import { useDebounce } from '../../hooks/useDebounce'
 const HomePage = () => {
   const searchProduct = useSelector((state) => state?.product?.search)
   const searchDebounce = useDebounce(searchProduct, 1000)
-  const refSearch = useRef()
   const [loading, setLoading] = useState(false)
-  const [stateProducts, setStateProducts] = useState([])
+  const [limit, setLimit] = useState(6)
   const arr = ["TV", "TU lanh", "Laptop"];
   
-  const fetchProductAll = async (search) => {
-    // if(search.length > 0) {}
-    const res = await ProductService.getAllProduct(search)
-    if(search?.length > 0 || refSearch.current) {
-      setStateProducts(res?.data)
-    }else {
-      return res
-    }
+  const fetchProductAll = async (context) => {
+    console.log('context', context)
+    const limit = context?.queryKey && context?.queryKey[1]
+    const search = context?.queryKey && context?.queryKey[2]
+    const res = await ProductService.getAllProduct(search, limit)
 
+    return res
   }
-
-  useEffect(() => {
-    if(refSearch.current) {
-      setLoading(true)
-      fetchProductAll(searchDebounce)
-    }
-    refSearch.current = true
-    setLoading(false)
-  },[searchDebounce])
   
-  const {isLoading, data: products} = useQuery(['products'], fetchProductAll, { retry: 3, retryDelay: 1000 })
+  const { isLoading, data: products, isPreviousData } = useQuery(['products', limit, searchDebounce], fetchProductAll, { retry: 3, retryDelay: 1000, keepPreviousData: true })
 
-  useEffect(() => {
-    if(products?.data?.length > 0) {
-      setStateProducts(products?.data)
-    }
-  }, [products])
-
-  console.log('««««« stateProducts »»»»»', stateProducts);
+  console.log('isPreviousData', products)
   
   return (
     <Loading isLoading={isLoading || loading}>
@@ -67,7 +47,7 @@ const HomePage = () => {
         <div id="container" style={{ height: '1000px', width: '1270px', margin: '0 auto' }}>  
           <SliderComponent arrayImage={[slider1, slider2, slider3]} />
           <WrapperProducts>
-            {stateProducts?.map((product) => {
+            {products?.data?.map((product) => {
               return (
                 <CardComponent 
                   key={product._id} 
@@ -85,10 +65,14 @@ const HomePage = () => {
             })}
           </WrapperProducts>
           <div style={{ width: '100%', display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
-            <WrapperButtonMore textButton="Xem thêm" type="outline" styleButton={{
-              border: '1px solid rgb(10, 104, 255)', color: 'rgb(10, 104, 255)', width: '240px', height: '38px', borderRadius: '4px'
-            }}
-              styleTextButton={{ fontWeight: 500 }}
+          <WrapperButtonMore
+              textButton={isPreviousData ? 'Load more' : "Xem thêm"} type="outline" styleButton={{
+                border: '1px solid rgb(11, 116, 229)', color: `${products?.total === products?.data?.length ? '#ccc' : 'rgb(11, 116, 229)'}`,
+                width: '240px', height: '38px', borderRadius: '4px'
+              }}
+              disabled={products?.total === products?.data?.length || products?.totalPage === 1}
+              styleTextButton={{ fontWeight: 500, color: products?.total === products?.data?.length && '#fff' }}
+              onClick={() => setLimit((prev) => prev + 6)}
             />
           </div>
         </div>

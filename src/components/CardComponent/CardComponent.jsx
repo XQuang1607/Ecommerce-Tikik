@@ -11,7 +11,7 @@ const CardComponent = (props) => {
             headStyle={{ width: '200px', height: '200px' }}
             style={{ width: 200 }}
             bodyStyle={{ padding: '10px' }}
-            cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}
+            cover={<img alt="example" src={image} />}
         >
             <img
                 src={logo}
@@ -32,9 +32,9 @@ const CardComponent = (props) => {
                 <WrapperStyleTextSell> | Da ban {selled || 1000 }+</WrapperStyleTextSell>
             </WrapperReportText>
             <WrapperPriceText>
-                <span style={{ marginRight: '8px' }}>{price}</span>
+                <span style={{ marginRight: '8px' }}>{price.toLocaleString()}</span>
                 <WrapperDiscountText>
-                    {discount || 5} %
+                   - {discount || 5} %
                 </WrapperDiscountText>
             </WrapperPriceText>
 
