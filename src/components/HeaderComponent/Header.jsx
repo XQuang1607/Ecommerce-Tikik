@@ -23,6 +23,7 @@ import Loading from "../LoadingComponent/Loading";
 import { useEffect } from "react";
 import { searchProduct } from '../../redux/slides/productSlide';
 
+
 const Header = ({ isHiddenSearch = false, isHiddenCart = false }) => {
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
@@ -30,6 +31,7 @@ const Header = ({ isHiddenSearch = false, isHiddenCart = false }) => {
   const [userName, setUserName] = useState("");
   const [userAvatar, setUserAvatar] = useState('')
   const [searc,setSearch] = useState('')
+  const order = useSelector((state) => state.order)
   const [loading, setLoading] = useState(false);
 
   const handleNavigateLogin = () => {
@@ -132,8 +134,8 @@ const Header = ({ isHiddenSearch = false, isHiddenCart = false }) => {
             </WrapperHeaderAccout>
           </Loading>
           {!isHiddenCart && (
-            <div>
-              <Badge count={4} size="small">
+             <div onClick={() => navigate('/order')} style={{cursor: 'pointer'}}>
+             <Badge count={order?.orderItems?.length} size="small">
                 <ShoppingCartOutlined style={{ fontSize: '30px', color: '#fff' }} />
               </Badge>
               <WrapperTextHeaderSmall>Giỏ hàng</WrapperTextHeaderSmall>
